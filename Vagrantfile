@@ -10,9 +10,9 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = ENV['HOST_NAME']
 
   config.vagrant.plugins = ["vagrant-hostmanager", "vagrant-env"]
-  
-  config.vm.network "private_network", type: "dhcp"
 
+  # Automatically set host file within host
+  config.vm.network "private_network", type: "dhcp"
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
   config.hostmanager.manage_guest = false
@@ -40,8 +40,10 @@ Vagrant.configure("2") do |config|
     ENV['MYSQL_DB_PASSWORD'], # MySQL password
     ENV['SERVER_NAME'], # Server name
     ENV['SERVER_ADMIN'], # Server admin
+    ENV['SITE_OWNER_EMAIL'], # Firefly-iii site owner email
+    ENV['TIMEZONE'], # Firefly-iii timezone
   ]
 
   # vagrant dir containing required files for provisioning
-  config.vm.synced_folder "./vagrant", "/vagrant", disabled: true
+  config.vm.synced_folder ".", "/var/www/" + ENV['SERVER_NAME'], type: "rsync", rsync__verbose: true
 end

@@ -14,6 +14,8 @@ MYSQL_DB_NAME=${1}
 MYSQL_PASSWORD=${2}
 SERVER_NAME=${3}
 SERVER_ADMIN=${4}
+SITE_OWNER_EMAIL=${5}
+TIMEZONE=${6}
 
 doc_root_path="/var/www/$SERVER_NAME"
 provision_log_dir="/var/log/vagrant-provision"
@@ -152,8 +154,8 @@ sudo chmod -R 775 $doc_root_path/storage || failed
 cp $doc_root_path/.env.example $doc_root_path/.env || failed
 sudo chown www-data:www-data $doc_root_path/.env
 sed -i -e 's/APP_ENV=local/APP_ENV=production/g' $doc_root_path/.env
-sed -i -e 's/SITE_OWNER=mail@example\.com/SITE_OWNER=jbaltero@gmail\.com/g' $doc_root_path/.env
-sed -i -e 's/TZ=Europe\/Amsterdam/TZ=Asia\/Manila/g' $doc_root_path/.env
+sed -i -e 's/SITE_OWNER=mail@example\.com/SITE_OWNER='$SITE_OWNER_EMAIL'/g' $doc_root_path/.env
+sed -i -e 's/TZ=Europe\/Amsterdam/TZ='$TIMEZONE'/g' $doc_root_path/.env
 sed -i -e 's/APP_URL=http:\/\/localhost/APP_URL=http:\/\/'$SERVER_NAME'/g' $doc_root_path/.env
 sed -i -e 's/DB_DATABASE=homestead/DB_DATABASE='$MYSQL_DB_NAME'/g' $doc_root_path/.env
 sed -i -e 's/DB_USERNAME=homestead/DB_USERNAME=root/g' $doc_root_path/.env
